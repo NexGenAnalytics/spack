@@ -3,6 +3,7 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 import os
+import shutil
 
 
 class Petsc(Package, CudaPackage, ROCmPackage):
@@ -519,8 +520,12 @@ class Petsc(Package, CudaPackage, ROCmPackage):
         python('configure', '--prefix=%s' % prefix, *options)
 
         # PETSc has its own way of doing parallel make.
-        make('MAKE_NP=%s' % make_jobs, parallel=False)
+        make('V=1 MAKE_NP=%s' % make_jobs, parallel=False)
         make("install")
+
+        # archive configure.log make.log
+        shutil.copy('configure.log', os.path.join(self.prefix, '.spack'))
+        shutil.copy('make.log', os.path.join(self.prefix, '.spack'))
 
         if self.run_tests:
             make('check PETSC_ARCH="" PETSC_DIR={0}'.format(self.prefix),
