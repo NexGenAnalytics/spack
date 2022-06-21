@@ -38,18 +38,59 @@ class Teuchos(CMakePackage):
 
     depends_on('cmake@3.20.0:', type='build')
 
-    # Mandatory dependencies
+    # Mandatory TPL dependencies
     # TPL (BLAS, LAPACK)
-#    depends_on('foo')
+    #    depends_on('openblas')
+
+    # Optionnal TPL dependencies(MPI, Eigen, BinUtils, QD, ARPREC, Boost, Qt)
+    variant('MPI', default=False, description='Compile with MPI parallelism')
+    variant('Eigen', default=False, description='Compile with Eigen')
+    variant('BinUtils', default=False, description='Compile with BinUtils')
+    variant('QD', default=False, description='Compile with QD')
+    variant('ARPREC', default=False, description='Compile with ARPREC')
+    variant('Boost', default=False, description='Compile with Boost')
+    variant('Qt', default=False, description='Compile with Qt')
+
+
+    # Optionnal Package dependencies (Kokkos)
+
+
+
 
     # Extra Cmake Options
 
-
     def cmake_args(self):
+
+        def _make_definer(prefix):
+            def define_enable(suffix, value=None):
+                key = prefix + suffix
+                if value is None:
+                    # Default to lower-case spec
+                    value = suffix.lower()
+                elif isinstance(value, bool):
+                    # Explicit true/false
+                    return define(key, value)
+                return define_from_variant(key, value)
+            return define_enable
+
+        # Return "Teuchos_ENABLE_XXX" for spec "+xxx" or boolean value
+        define_teuchos_enable = _make_definer("Teuchos_ENABLE_")
+        # Same but for TPLs
+        define_tpl_enable = _make_definer("TPL_ENABLE_")
         # FIXME: Add arguments other than
         # FIXME: CMAKE_INSTALL_PREFIX and CMAKE_BUILD_TYPE
         # FIXME: If not needed delete this function
         args = [
         '-DCMAKE_POSITION_INDEPENDENT_CODE=ON'
         ]
+
+        options.extend([
+            define_trilinos_enable('MPI'),
+            define_trilinos_enable('Eigen'),
+            define_trilinos_enable('BinUtils'),
+            define_trilinos_enable('QD'),
+            define_trilinos_enable('ARPREC'),
+            define_trilinos_enable('Boost'),
+            define_trilinos_enable('Qt'),
+        ])
         return args
