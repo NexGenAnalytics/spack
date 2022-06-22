@@ -61,12 +61,16 @@ class Teuchos(CMakePackage):
 
     def cmake_args(self):
 
+        spec = self.spec
+        define = CMakePackage.define
+        define_from_variant = self.define_from_variant
+
         def _make_definer(prefix):
             def define_enable(suffix, value=None):
                 key = prefix + suffix
                 if value is None:
                     # Default to lower-case spec
-                    value = suffix.lower()
+                    value = suffix
                 elif isinstance(value, bool):
                     # Explicit true/false
                     return define(key, value)
@@ -84,13 +88,13 @@ class Teuchos(CMakePackage):
         '-DCMAKE_POSITION_INDEPENDENT_CODE=ON'
         ]
 
-        options.extend([
-            define_trilinos_enable('MPI'),
-            define_trilinos_enable('Eigen'),
-            define_trilinos_enable('BinUtils'),
-            define_trilinos_enable('QD'),
-            define_trilinos_enable('ARPREC'),
-            define_trilinos_enable('Boost'),
-            define_trilinos_enable('Qt'),
+        args.extend([
+            define_teuchos_enable('MPI'),
+            define_teuchos_enable('Eigen'),
+            define_teuchos_enable('BinUtils'),
+            define_teuchos_enable('QD'),
+            define_teuchos_enable('ARPREC'),
+            define_teuchos_enable('Boost'),
+            define_teuchos_enable('Qt'),
         ])
         return args
