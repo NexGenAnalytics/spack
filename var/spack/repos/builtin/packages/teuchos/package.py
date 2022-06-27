@@ -32,7 +32,7 @@ class Teuchos(CMakePackage):
 
     maintainers = ['keitat']
 
-    version('5-CMakeScriptTeuchos-as', branch='5-CMakeScriptTeuchos-as', preferred=True)
+    version('1-teuchos-cmake', branch='1-teuchos-cmake', preferred=True)
 
     root_cmakelists_dir = "packages/teuchos"
 
@@ -85,7 +85,8 @@ class Teuchos(CMakePackage):
         # FIXME: CMAKE_INSTALL_PREFIX and CMAKE_BUILD_TYPE
         # FIXME: If not needed delete this function
         args = [
-        '-DCMAKE_POSITION_INDEPENDENT_CODE=ON'
+        '-DCMAKE_POSITION_INDEPENDENT_CODE=ON',
+        '-DTEUCHOS_STANDALONE_PACKAGE=ON'
         ]
 
         args.extend([
