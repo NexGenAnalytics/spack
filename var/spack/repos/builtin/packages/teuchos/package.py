@@ -20,8 +20,12 @@
 # See the Spack documentation for more information on packaging.
 # ----------------------------------------------------------------------------
 
+import sys
+
 from spack import *
 
+#def trilinosez_depends_on_test(spec, **kwargs):
+#    depends_on('mpi')
 
 class Teuchos(CMakePackage):
     """FIXME: Put a proper description of your package here."""
@@ -44,20 +48,26 @@ class Teuchos(CMakePackage):
 
     # Optionnal TPL dependencies(MPI, Eigen, BinUtils, QD, ARPREC, Boost, Qt)
     variant('MPI', default=False, description='Compile with MPI parallelism')
-    variant('Eigen', default=False, description='Compile with Eigen')
-    variant('BinUtils', default=False, description='Compile with BinUtils')
-    variant('QD', default=False, description='Compile with QD')
-    variant('ARPREC', default=False, description='Compile with ARPREC')
+    variant('Eigen3', default=False, description='Compile with Eigen')
     variant('Boost', default=False, description='Compile with Boost')
-    variant('Qt', default=False, description='Compile with Qt')
+    variant('Pthread', default=False, description='Compile with Pthread')
+    variant('Kokkos', default=False, description='Compile with Kokkos')
+    variant('ARPREC', default=False, description='Compile with ARPREC')
+    variant('QT', default=False, description='Compile with Qt')
+    variant('QD', default=False, description='Compile with QD')
+    variant('BinUtils', default=False, description='Compile with BinUtils')
+    variant('Valgrind', default=False, description='Compile with Valgrind')
 
+    # Deeper depdencies depending of Variants:
+    depends_on('boost', when='+Boost')
+    depends_on('kokkos', when='+Kokkos')
+    depends_on('eigen', when='+Eigen3')
+    depends_on('mpi', when='+MPI')
 
     # Optionnal Package dependencies (Kokkos)
 
-
-
-
     # Extra Cmake Options
+
 
     def cmake_args(self):
 
@@ -91,11 +101,15 @@ class Teuchos(CMakePackage):
 
         args.extend([
             define_teuchos_enable('MPI'),
-            define_teuchos_enable('Eigen'),
-            define_teuchos_enable('BinUtils'),
+            define_teuchos_enable('Eigen3'),
+            define_teuchos_enable('Boost'),
+            define_teuchos_enable('Pthread'),
+            define_teuchos_enable('Kokkos'),
             define_teuchos_enable('QD'),
             define_teuchos_enable('ARPREC'),
-            define_teuchos_enable('Boost'),
-            define_teuchos_enable('Qt'),
+            define_teuchos_enable('QT'),
+            define_teuchos_enable('BinUtils'),
+            define_teuchos_enable('Valgrind'),
         ])
+
         return args
