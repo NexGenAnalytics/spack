@@ -32,7 +32,8 @@ class Teuchos(CMakePackage):
 
     # FIXME: Add a proper url for your package's homepage here.
     homepage = "https://www.example.com"
-    git      = "git@github.com:MikolajZuzek/Trilinos.git"
+    git      = "ssh://git@github.com/MikolajZuzek/Trilinos.git"
+    url      = "http://localhost/0.1.0.tar.gz"
 
     maintainers = ['keitat']
 
