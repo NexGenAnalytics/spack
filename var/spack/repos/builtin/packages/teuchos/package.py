@@ -65,6 +65,12 @@ class Teuchos(CMakePackage):
             elif isinstance(value, bool):
                 return self.define(f'Teuchos_ENABLE_{suffix}', value)
 
+        def define_tpl_enable(suffix, value=None):
+            if value is None:
+                return self.define_from_variant(f'TPL_ENABLE_{suffix}', suffix)
+            elif isinstance(value, bool):
+                return self.define(f'TPL_ENABLE_{suffix}', value)
+
         num_of_proc = 1
         try:
             num_of_proc = int(subprocess.run(['nproc', '--all'],
@@ -81,7 +87,6 @@ class Teuchos(CMakePackage):
         ]
         args.extend([
             define_teuchos_enable('ARPREC'),
-            define_teuchos_enable('BinUtils'),
             define_teuchos_enable('Boost'),
             define_teuchos_enable('Eigen'),
             define_teuchos_enable('Kokkos'),
@@ -89,6 +94,7 @@ class Teuchos(CMakePackage):
             define_teuchos_enable('Pthread'),
             define_teuchos_enable('QD'),
             define_teuchos_enable('Qt'),
-            define_teuchos_enable('Valgrind'),
+            define_tpl_enable('BinUtils'),
+            define_tpl_enable('Valgrind'),
         ])
         return args
