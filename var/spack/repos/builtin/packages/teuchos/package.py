@@ -40,7 +40,7 @@ class Teuchos(CMakePackage):
     depends_on('cmake@3.20.0:', type='build')
     depends_on('openblas')
     depends_on('lapack')
-    depends_on('boost', when='+Boost')
+    depends_on('boost+program_options', when='+Boost')
     depends_on('eigen', when='+Eigen')
     depends_on('kokkos', when='+Kokkos')
     depends_on('openmpi', when='+MPI')
